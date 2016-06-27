@@ -83,7 +83,7 @@ public class MyFilteredLearner {
             trainData.setClassIndex(0);
             filter = new StringToWordVector();
             filter.setAttributeIndices("last");
-            setMyWordTokenizer(filter);
+            //setMyWordTokenizer(filter);
             classifier = new FilteredClassifier();
             classifier.setFilter(filter);
             classifier.setClassifier(new NaiveBayes());
@@ -105,7 +105,7 @@ public class MyFilteredLearner {
             trainData.setClassIndex(0);
             filter = new StringToWordVector();
             filter.setAttributeIndices("last");
-            setMyWordTokenizer(filter);
+           // setMyWordTokenizer(filter);
             classifier = new FilteredClassifier();
             classifier.setFilter(filter);
             classifier.setClassifier(new NaiveBayes());
