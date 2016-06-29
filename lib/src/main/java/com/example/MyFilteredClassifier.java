@@ -13,12 +13,18 @@ package com.example;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
+import com.example.vision.VisionUtil;
+import com.google.api.services.vision.v1.model.AnnotateImageResponse;
+import com.google.api.services.vision.v1.model.EntityAnnotation;
+
 import weka.core.*;
 import weka.core.FastVector;
 import weka.classifiers.meta.FilteredClassifier;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * This class implements a simple text classifier in Java using WEKA.
@@ -61,6 +67,33 @@ public class MyFilteredClassifier {
             //System.out.println(text);
         } catch (IOException e) {
             System.out.println("Problem found when reading: " + fileName);
+        }
+        return lines;
+    }
+
+    public ArrayList<String> loadResponseJson(String path) {
+        ArrayList<String> lines = new ArrayList<>();
+        AnnotateImageResponse annotateImageResponse = VisionUtil.readResponseJson(path);
+        if (annotateImageResponse == null) {
+            return lines;
+        }
+
+        System.out.print(VisionUtil.GetPrintOutString(annotateImageResponse).toString());
+        List<EntityAnnotation> labels = annotateImageResponse.getTextAnnotations();
+        if (labels != null) {
+            for (int i = 0; i < labels.size(); i++ ) {
+                EntityAnnotation label = labels.get(i);
+                if (i == 0) {
+                    //builder.append("Locale: ");
+                    //builder.append(label.getLocale());
+                    //builder.append("\n");
+                }
+                String [] arrayLines = label.getDescription().split("\n");
+                for (String line : arrayLines) {
+                    lines.add(line);
+                }
+                break;
+            }
         }
         return lines;
     }
@@ -135,11 +168,15 @@ public class MyFilteredClassifier {
      */
     public static void main(String[] args) {
 
+        String path = "/Users/jackf/Downloads/TestImages/test_cloud_vision_output_tw/0Pk9iDswwc.json";
+
         MyFilteredClassifier classifier;
         classifier = new MyFilteredClassifier();
         classifier.loadModel(MyFilteredLearner.BASE_DIR + "my_model");
 
-        ArrayList<String> lines = classifier.load(MyFilteredLearner.BASE_DIR + "smstest.txt");
+        //ArrayList<String> lines = classifier.load(MyFilteredLearner.BASE_DIR + "smstest.txt");
+        ArrayList<String> lines = classifier.loadResponseJson(path);
+
         for (int i = 0; i < lines.size(); i++) {
             String line = lines.get(i);
             Instances instances = classifier.makeInstance(line);
