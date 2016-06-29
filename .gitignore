@@ -36,5 +36,5 @@ proguard/
 
 # generated
 ci_build/rc_tag.txt
-my_model
+my_model*
 
