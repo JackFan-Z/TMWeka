@@ -123,8 +123,8 @@ public class MyFilteredClassifier {
     public Instances makeInstance(String line) {
         // Create the attributes, class and text
         FastVector fvNominalVal = new FastVector(2);
-        fvNominalVal.addElement("spam");
-        fvNominalVal.addElement("ham");
+        fvNominalVal.addElement("Jobtitle");
+        fvNominalVal.addElement("Address");
         Attribute attribute1 = new Attribute("class", fvNominalVal);
         Attribute attribute2 = new Attribute("text", (FastVector) null);
         // Create list of instances with one element

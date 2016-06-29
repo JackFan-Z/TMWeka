@@ -14,7 +14,7 @@ package com.example;
  */
 
 import weka.core.Instances;
-//import weka.core.tokenizers.WordTokenizer;
+import weka.core.tokenizers.WordTokenizer;
 import weka.filters.unsupervised.attribute.StringToWordVector;
 import weka.classifiers.Evaluation;
 
@@ -49,13 +49,13 @@ public class MyFilteredLearner {
      */
     FilteredClassifier classifier;
 
-/*    public void setMyWordTokenizer(StringToWordVector filter) {
+    public void setMyWordTokenizer(StringToWordVector filter) {
         //Make a tokenizer
         WordTokenizer wt = new WordTokenizer();
         String delimiters = " \r\t\n.,;:\'\"()?!-><#$\\%&*+/@^_=[]{}|`~0123456789";
         wt.setDelimiters(delimiters);
         filter.setTokenizer(wt);
-    }*/
+    }
     /**
      * This method loads a dataset in ARFF format. If the file does not exist, or
      * it has a wrong format, the attribute trainData is null.
@@ -83,14 +83,40 @@ public class MyFilteredLearner {
             trainData.setClassIndex(0);
             filter = new StringToWordVector();
             filter.setAttributeIndices("last");
-          //  setMyWordTokenizer(filter);
+            setMyWordTokenizer(filter);
             classifier = new FilteredClassifier();
             classifier.setFilter(filter);
             classifier.setClassifier(new NaiveBayes());
             Evaluation eval = new Evaluation(trainData);
-            eval.crossValidateModel(classifier, trainData, 4, new Random(1));
+
+            int seed= 1;
+            int folds= 4;
+     /*       int runs= 10;
+
+            for(int i =0; i<runs; i++){
+                seed=i+1;
+
+                //randomize the data
+                Random rand = new Random(seed);
+                Instances randData=new Instances(trainData);
+                randData.randomize(rand);
+
+                //generate the folds
+
+                for(int n=0; n<folds;n++){
+                    Instances train = randData.trainCV(folds,n);
+                    Instances test =
+                }
+
+            }
+*/
+
+            Random rand= new Random(seed);
+            eval.crossValidateModel(classifier, trainData,folds, rand);
+         //   System.out.println(trainData);
             System.out.println(eval.toSummaryString());
             System.out.println(eval.toClassDetailsString());
+            System.out.println(eval.toMatrixString());
             System.out.println("===== Evaluating on filtered (training) dataset done =====");
         } catch (Exception e) {
             System.out.println("Problem found when evaluating");
@@ -105,13 +131,13 @@ public class MyFilteredLearner {
             trainData.setClassIndex(0);
             filter = new StringToWordVector();
             filter.setAttributeIndices("last");
-      //      setMyWordTokenizer(filter);
+            setMyWordTokenizer(filter);
             classifier = new FilteredClassifier();
             classifier.setFilter(filter);
             classifier.setClassifier(new NaiveBayes());
             classifier.buildClassifier(trainData);
             // Uncomment to see the classifier
-            // System.out.println(classifier);
+           //  System.out.println(classifier);
             System.out.println("===== Training on filtered (training) dataset done =====");
         } catch (Exception e) {
             System.out.println("Problem found when training");
@@ -149,4 +175,4 @@ public class MyFilteredLearner {
         learner.learn();
         learner.saveModel(BASE_DIR + "my_model");
     }
-}	
+}
