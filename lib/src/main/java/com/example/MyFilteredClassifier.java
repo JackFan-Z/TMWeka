@@ -13,6 +13,7 @@ package com.example;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
+import com.example.util.MyUtils;
 import com.example.vision.VisionUtil;
 import com.google.api.services.vision.v1.model.AnnotateImageResponse;
 import com.google.api.services.vision.v1.model.EntityAnnotation;
@@ -168,14 +169,21 @@ public class MyFilteredClassifier {
      */
     public static void main(String[] args) {
 
-        String path = "/Users/jackf/Downloads/TestImages/test_cloud_vision_output_tw/0Pk9iDswwc.json";
+        String jsonFolder = "/Users/jackf/Downloads/TestImages/test_cloud_vision_output_tw/";
+        ArrayList<String> jsonPaths = MyUtils.GetFileListEx(jsonFolder, new String[]{".json"});
+        for (int i = 0; i < jsonPaths.size(); i++) {
+            System.out.println(jsonPaths.get(i));
+            if (i > 4) {
+                break;
+            }
+        }
 
         MyFilteredClassifier classifier;
         classifier = new MyFilteredClassifier();
         classifier.loadModel(MyFilteredLearner.BASE_DIR + "my_model");
 
         //ArrayList<String> lines = classifier.load(MyFilteredLearner.BASE_DIR + "smstest.txt");
-        ArrayList<String> lines = classifier.loadResponseJson(path);
+        ArrayList<String> lines = classifier.loadResponseJson(jsonPaths.get(0));
 
         for (int i = 0; i < lines.size(); i++) {
             String line = lines.get(i);
