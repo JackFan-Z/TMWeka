@@ -14,7 +14,7 @@ package com.example;
  */
 
 import weka.core.Instances;
-import weka.core.tokenizers.WordTokenizer;
+//import weka.core.tokenizers.WordTokenizer;
 import weka.filters.unsupervised.attribute.StringToWordVector;
 import weka.classifiers.Evaluation;
 
@@ -49,13 +49,13 @@ public class MyFilteredLearner {
      */
     FilteredClassifier classifier;
 
-    public void setMyWordTokenizer(StringToWordVector filter) {
+/*    public void setMyWordTokenizer(StringToWordVector filter) {
         //Make a tokenizer
         WordTokenizer wt = new WordTokenizer();
         String delimiters = " \r\t\n.,;:\'\"()?!-><#$\\%&*+/@^_=[]{}|`~0123456789";
         wt.setDelimiters(delimiters);
         filter.setTokenizer(wt);
-    }
+    }*/
     /**
      * This method loads a dataset in ARFF format. If the file does not exist, or
      * it has a wrong format, the attribute trainData is null.
@@ -83,7 +83,7 @@ public class MyFilteredLearner {
             trainData.setClassIndex(0);
             filter = new StringToWordVector();
             filter.setAttributeIndices("last");
-            setMyWordTokenizer(filter);
+          //  setMyWordTokenizer(filter);
             classifier = new FilteredClassifier();
             classifier.setFilter(filter);
             classifier.setClassifier(new NaiveBayes());
@@ -105,7 +105,7 @@ public class MyFilteredLearner {
             trainData.setClassIndex(0);
             filter = new StringToWordVector();
             filter.setAttributeIndices("last");
-            setMyWordTokenizer(filter);
+      //      setMyWordTokenizer(filter);
             classifier = new FilteredClassifier();
             classifier.setFilter(filter);
             classifier.setClassifier(new NaiveBayes());
