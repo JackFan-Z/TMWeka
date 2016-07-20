@@ -122,9 +122,12 @@ public class MyFilteredClassifier {
      */
     public Instances makeInstance(String line) {
         // Create the attributes, class and text
-        FastVector fvNominalVal = new FastVector(2);
-        fvNominalVal.addElement("Jobtitle");
+        FastVector fvNominalVal = new FastVector(4); // Should this be changed to (4) then?
         fvNominalVal.addElement("Address");
+        fvNominalVal.addElement("Jobtitle");
+        fvNominalVal.addElement("Company");
+        fvNominalVal.addElement("Name");
+        fvNominalVal.addElement("Others");
         Attribute attribute1 = new Attribute("class", fvNominalVal);
         Attribute attribute2 = new Attribute("text", (FastVector) null);
         // Create list of instances with one element
@@ -169,26 +172,47 @@ public class MyFilteredClassifier {
      */
     public static void main(String[] args) {
 
-        String jsonFolder = "/Users/jackf/Downloads/TestImages/test_cloud_vision_output_tw/";
-        ArrayList<String> jsonPaths = MyUtils.GetFileListEx(jsonFolder, new String[]{".json"});
+        String jsonFolder = "/Users/JohnnyTruong/Desktop/Praktik i T/test_cloud_vision_output_tw2";
+        ArrayList<String> jsonPaths = MyUtils.GetFileListEx(jsonFolder, new String[]{".json"}); // Använder GetFileLiastEX från MyUtils.java
         for (int i = 0; i < jsonPaths.size(); i++) {
             System.out.println(jsonPaths.get(i));
-            if (i > 4) {
+            if (i > 4) { //?
                 break;
             }
         }
 
         MyFilteredClassifier classifier;
         classifier = new MyFilteredClassifier();
-        classifier.loadModel(MyFilteredLearner.BASE_DIR + "my_model");
+        classifier.loadModel(MyFilteredLearner.BASE_DIR + "my_modelChinese");
 
         //ArrayList<String> lines = classifier.load(MyFilteredLearner.BASE_DIR + "smstest.txt");
-        ArrayList<String> lines = classifier.loadResponseJson(jsonPaths.get(0));
 
-        for (int i = 0; i < lines.size(); i++) {
-            String line = lines.get(i);
-            Instances instances = classifier.makeInstance(line);
-            classifier.classify(instances);
+        int adrnum=0;
+        int othernum=0;
+
+
+        for(int j=0;j<jsonPaths.size();j++) { // I wrote a loop that goes trough each line for each JSON-file.
+
+            ArrayList<String> lines = classifier.loadResponseJson(jsonPaths.get(j));
+            for (int i = 0; i < lines.size(); i++) {
+                String line = lines.get(i);
+                Instances instances = classifier.makeInstance(line);
+                classifier.classify(instances);
+
+/*            if(line.equals("Address")){
+                adrnum++;
+            }
+                else        //I tried earlier to write an if-statement for calculating the number for each label(Address, Others)
+            {
+                othernum++;
+            }*/
+            }
         }
+/*        System.out.println("        ");
+        System.out.println("=== Statistics ===");
+        System.out.println("The number of classified Addresses: "+adrnum);
+        System.out.println("The number of classified Others: "+othernum);*/
+
     }
-}	
+
+}

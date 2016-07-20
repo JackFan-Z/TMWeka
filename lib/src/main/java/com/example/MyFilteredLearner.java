@@ -89,7 +89,8 @@ public class MyFilteredLearner {
             classifier.setClassifier(new NaiveBayes());
             Evaluation eval = new Evaluation(trainData);
 
-            int seed= 1;
+
+            int seed= 10;
             int folds= 4;
      /*       int runs= 10;
 
@@ -137,7 +138,7 @@ public class MyFilteredLearner {
             classifier.setClassifier(new NaiveBayes());
             classifier.buildClassifier(trainData);
             // Uncomment to see the classifier
-           //  System.out.println(classifier);
+           // System.out.println(classifier);
             System.out.println("===== Training on filtered (training) dataset done =====");
         } catch (Exception e) {
             System.out.println("Problem found when training");
@@ -168,11 +169,11 @@ public class MyFilteredLearner {
 
         MyFilteredLearner learner;
         learner = new MyFilteredLearner();
-        learner.loadDataset(BASE_DIR + "smsspam.small.arff");
-        // Evaluation mus be done before training
+        learner.loadDataset(BASE_DIR + "smsspam.smallChinese.arff");
+        // Evaluation must be done before training
         // More info in: http://weka.wikispaces.com/Use+WEKA+in+your+Java+code
         learner.evaluate();
         learner.learn();
-        learner.saveModel(BASE_DIR + "my_model");
+        learner.saveModel(BASE_DIR + "my_modelChinese"); // Save the model and later used in classifier class.
     }
 }
